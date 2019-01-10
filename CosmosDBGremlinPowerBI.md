@@ -24,7 +24,8 @@ Set the access policy for your images container to Blob so that your files can b
 ![6.SetBlobAccess](images/6.SetBlobAccess.png)
 If you now open the properties of the images, you’ll get a URL for each which we will need later so note it down. This will look something like: https://lusty03012019.blob.core.windows.net/images/author.png. Try this in a browser to ensure you get the image. 
 ## Cosmos DB
-In the portal, create a new Azure Cosmos DB instance. Select the GremlinPowerBIDemo resource group and name the account gremlin<yourname>2019. Since this is a public DNS endpoint it must be unique, hence using your name and the year for the demo. Select Gremlin (Graph) as the API for your database and an appropriate region. Disable Geo-Redundancy and Multi-region Writes since we don’t need them and want to keep costs to a minimum.
+In the portal, create a new Azure Cosmos DB instance. Select the GremlinPowerBIDemo resource group and name the account gremlin<yourname>2019. Since this is a public DNS endpoint it must be unique, hence using your name and the year for the demo. Select Gremlin (Graph) as the API for your database and an appropriate region. Disable Geo-Redundancy and Multi-
+region Writes since we don’t need them and want to keep costs to a minimum.
 ![7.CreateCosmosDB](images/7.CreateCosmosDB.png)
 Click review and create and then create since we don’t need any other settings here. You can optionally add a tag but since we tagged the resource group and encapsulated the solution I generally don’t at this level. The Cosmos DB instance will take several minutes to provision.
 ## Gremlin Graph Database
@@ -56,7 +57,6 @@ We can string these together by simply putting a .addV on the end of the line:
 ```
 g.addV('book').property('name','Harry Potter and the Philosophers Stone').property('pages','223').addV('book').property('name','Harry Potter and the Chamber of Secrets').property('pages','251').addV('book').property('name','Harry Potter and the Prisoner of Azkaban').property('pages','317').addV('book').property('name','Harry Potter and the Goblet of Fire').property('pages','636').addV('book').property('name','Harry Potter and the Order of the Phoenix').property('pages','766').addV('book').property('name','Harry Potter and the Half-Blood Prince').property('pages','607').addV('book').property('name','Harry Potter and the Deathly Hallows').property('pages','607')
 ```
-
 I’ll tidy that up so you can see it more easily:
 ```
 g.addV('book').property('name','Harry Potter and the Philosophers Stone').property('pages','223')

@@ -169,7 +169,7 @@ Since this is a collection of JSON documents you won’t see the information, ju
 Next, we need to modify the query for our data. Click Edit Queries and then rename Query1 to Nodes1. Select the query on the left. Right click and go to Advanced Editor. Add in the query as highlighted below. Bear in mind that your URI will be different so do not copy and paste this whole query.
 ```
 let
-    Source = DocumentDB.Contents("https://gremlinlusty2019.documents.azure.com:443/", "books", "bookCollection", [Query = "SELECT * FROM authors a"])
+    Source = DocumentDB.Contents("https://<YOURDBNAME>.documents.azure.com:443/", "books", "bookCollection", [Query = "SELECT * FROM authors a"])
 in
     Source
 ```
@@ -177,7 +177,7 @@ in
 Click Done to go back to the edit queries screen. Here, right click on Nodes1 and duplicate the query. Rename the copy (Nodes1 (2)) as Edges and then open the advanced editor for this new query. Change the query to the below to select only records with the _isEdge = true property.
 ```
 let
-    Source = DocumentDB.Contents("https://gremlinlusty2019.documents.azure.com:443/", "books", "bookCollection", [Query = "SELECT * FROM edges e WHERE e._isEdge = true"])
+    Source = DocumentDB.Contents("https://<YOURDBNAME>.documents.azure.com:443/", "books", "bookCollection", [Query = "SELECT * FROM edges e WHERE e._isEdge = true"])
 in
     Source
 ```

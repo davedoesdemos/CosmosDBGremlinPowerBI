@@ -1,7 +1,7 @@
 # Cosmos DB Gremlin and Power BI
-Produced by Dave Lusty and Marius Panga
+**Produced by Dave Lusty and Marius Panga**
 # Introduction
-In this demo we will configure Cosmos DB as a Gremlin database. We’ll then add some graph data to the database and query that using a visualisation in Power BI.
+In this demo we will configure Cosmos DB as a Gremlin database. We’ll then add some graph data to the database and query that using a visualisation in Power BI. You can find the [video demo here](https://youtu.be/kP9_8mbDXYA)
 # Configure Cosmos DB
 ## Demo Environment
 As ever with demos or indeed production, we want to encapsulate our service within a resource group so that we can easily manage it as a single entity later on. In the portal, create a new resource group and call it GremlinPowerBIDemo.

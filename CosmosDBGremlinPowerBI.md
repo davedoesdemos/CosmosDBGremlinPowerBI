@@ -1,9 +1,15 @@
 # Cosmos DB Gremlin and Power BI
+
 **Produced by Dave Lusty and Marius Panga**
+
 # Introduction
+
 In this demo we will configure Cosmos DB as a Gremlin database. We’ll then add some graph data to the database and query that using a visualisation in Power BI. You can find the [video demo here](https://youtu.be/kP9_8mbDXYA)
+
 # Configure Cosmos DB
+
 ## Demo Environment
+
 As ever with demos or indeed production, we want to encapsulate our service within a resource group so that we can easily manage it as a single entity later on. In the portal, create a new resource group and call it GremlinPowerBIDemo.
 
 ![1.CreateResourceGroup](images/1.CreateResourceGroup.png)
@@ -17,6 +23,7 @@ On the resource group page, you can filter by tags using the drop down at the to
 ![3.FilterByTags](images/3.FilterByTags.png)
 
 ## Create Storage Account
+
 In your resource group, create a storage account and give it a random name (for instance, your last name and the current date i.e. lusty03012019). Use LRS to keep costs down and place it into the GremlinPowerBIDemo resource group.
 
 ![4.CreateStorageAccount](images/4.CreateStorageAccount.png)
@@ -38,29 +45,35 @@ Set the access policy for your images container to Blob so that your files can b
 ![6.SetBlobAccess](images/6.SetBlobAccess.png)
 
 If you now open the properties of the images, you’ll get a URL for each which we will need later so note it down. This will look something like: https://lusty03012019.blob.core.windows.net/images/author.png. Try this in a browser to ensure you get the image. 
+
 ## Cosmos DB
+
 In the portal, create a new Azure Cosmos DB instance. Select the GremlinPowerBIDemo resource group and name the account gremlin<yourname>2019. Since this is a public DNS endpoint it must be unique, hence using your name and the year for the demo. Select Gremlin (Graph) as the API for your database and an appropriate region. Disable Geo-Redundancy and Multi-
 region Writes since we don’t need them and want to keep costs to a minimum.
 
 ![7.CreateCosmosDB](images/7.CreateCosmosDB.png)
 
 Click review and create and then create since we don’t need any other settings here. You can optionally add a tag but since we tagged the resource group and encapsulated the solution I generally don’t at this level. The Cosmos DB instance will take several minutes to provision.
+
 ## Gremlin Graph Database
+
 Now that we have a Cosmos DB instance, we can create a database. Browse to the Cosmos DB resource in the portal and then click Data Explorer. From here we can create our new database.
 
 ![8.GremlinDataExplorer](images/8.GremlinDataExplorer.png)
 
-Click New Database and call it books. 
+Click New Database and call it books.
 
 ![9.NewDatabase](images/9.NewDatabase.png)
 
 ## Configure Graph
+
 Now, click New Graph to set up a graph within your database. Choose your books database and call the collection bookCollection. If you didn’t set up throughput on the database, set it here to 400 RU/s to keep costs down for the demo.  **This is important**. Select Provision Throughput and set throughput to 400 either on the database or graph. The default 50,000 RU/s will cost you $96 a day. EVERY DAY YOU LEAVE IT RUNNING. This is just under $3000 per month.
 For this demo we will use /name as the key. In production you should choose a key very carefully to ensure your database scales well.
 
 ![10.NewGraph](images/10.NewGraph.png)
 
 ## Create Data Manually - Vertexes
+
 You can now expand out the graph and add data by clicking on New Vertex.
 
 ![11.AddVertex](images/11.AddVertex.png)
@@ -70,10 +83,12 @@ Here you can type arbitrary information and fields in to create Vertexes (also s
 ![12.VertexDetails](images/12.VertexDetails.png)
 
 ## Create Data Script - Vertexes
+
 Since this is just a demo, we don’t want to spend a lot of time adding data, so we’ll use some scripting. In the query box, type the following:
 ```
 g.addV('author').property('name','J K Rowling').property('gender','Female')
 ```
+
 Then press Execute Gremlin Query. Don’t press enter as this does something else in the interface and appears to hang.
 
 ![13.ExecuteGremlinQuery](images/13.ExecuteGremlinQuery.png)
@@ -82,11 +97,15 @@ Repeat these steps with the following query:
 ```
 g.addV('author').property('name','Luke Rhinehart').property('gender','Male')
 ```
+
 We can string these together by simply putting a .addV on the end of the line:
+
 ```
 g.addV('book').property('name','Harry Potter and the Philosophers Stone').property('pages','223').addV('book').property('name','Harry Potter and the Chamber of Secrets').property('pages','251').addV('book').property('name','Harry Potter and the Prisoner of Azkaban').property('pages','317').addV('book').property('name','Harry Potter and the Goblet of Fire').property('pages','636').addV('book').property('name','Harry Potter and the Order of the Phoenix').property('pages','766').addV('book').property('name','Harry Potter and the Half-Blood Prince').property('pages','607').addV('book').property('name','Harry Potter and the Deathly Hallows').property('pages','607')
 ```
+
 I’ll tidy that up so you can see it more easily:
+
 ```
 g.addV('book').property('name','Harry Potter and the Philosophers Stone').property('pages','223')
  .addV('book').property('name','Harry Potter and the Chamber of Secrets').property('pages','251')
@@ -96,6 +115,7 @@ g.addV('book').property('name','Harry Potter and the Philosophers Stone').proper
  .addV('book').property('name','Harry Potter and the Half-Blood Prince').property('pages','607')
  .addV('book').property('name','Harry Potter and the Deathly Hallows').property('pages','607')
 ```
+
 You can use shift and enter for new lines in your query to keep it neat, but they don’t affect the query at all. Finally, run the following to add some more data:
 ```
 g.addV('book').property('name','The Hobbit').property('pages','310')
@@ -104,7 +124,9 @@ g.addV('book').property('name','The Hobbit').property('pages','310')
 .addV('book').property('name','The Return of the King').property('pages','416')
 .addV('book').property('name','The Dice Man').property('pages','500')
 ```
+
 ## Create Data Manually – Edges
+
 To create an edge and link two vertexes we need to select the vertex. To do this, run the query g.V() to return all of the vertexes, then browse to find the one you want. You’ll then see a screen like the below:
 
 ![14.CreateEdge](images/14.CreateEdge.png)
@@ -114,6 +136,7 @@ Here, we can create edges. These are directional, so JRR Tolkien wrote The Hobbi
 ![15.EdgeDetail](images/15.EdgeDetail.png)
 
 ## Create Data Script – Edges
+
 The following three scripts can now be run to create further edges. These will add edges for wrote, knows and read to link our vertexes.
 ```
 g.V().has('author', 'name', 'J R R Tolkien').addE('wrote').from(g.V().has('book', 'name', 'The Fellowship of the Ring'))
